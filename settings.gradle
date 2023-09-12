@@ -9,7 +9,7 @@ FileTree buildFiles = fileTree(rootDir) {
         exclude excludes
     }
 }
-
+ 
 String rootDirPath = rootDir.absolutePath + File.separator
 buildFiles.each { File buildFile ->
 
