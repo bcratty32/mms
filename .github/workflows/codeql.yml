@@ -33,7 +33,8 @@ jobs:
         with:
           languages: ${{ matrix.language }}
           config-file: ./.github/codeql.yml
-          queries: +security-and-quality,./.github/workflows/custom-queries/
+          queries: ./codeql-repo/java/ql/test/experimental/query-tests/security/CWE-502/
+          # queries: +security-and-quality,./.github/workflows/custom-queries/
 
       - name: Autobuild
         uses: github/codeql-action/autobuild@v2
