@@ -29,8 +29,8 @@ jobs:
           distribution: temurin
           java-version: 11
 
-      - name: Compile Java
-        run: ./gradlew --no-daemon bootRun
+      # - name: Compile Java
+      #   run: ./gradlew --no-daemon bootJar
 
       # Initialize for built-in queries
       - name: Initialize CodeQL for built-in queries
