@@ -22,31 +22,31 @@ jobs:
       matrix:
         language: [ "java" ]
 
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          submodules: 'recursive'
+    # steps:
+    #   - name: Checkout
+    #     uses: actions/checkout@v3
+    #     with:
+    #       submodules: 'recursive'
 
-      - name: Setup Java
-        uses: actions/setup-java@v3
-        with:
-          distribution: temurin
-          java-version: 11
+    #   - name: Setup Java
+    #     uses: actions/setup-java@v3
+    #     with:
+    #       distribution: temurin
+    #       java-version: 11
 
-      - name: Initialize CodeQL for Standard Queries
-        uses: github/codeql-action/init@v2
-        with:
-          languages: ${{ matrix.language }}
-          queries: +security-and-quality
+    #   - name: Initialize CodeQL for Standard Queries
+    #     uses: github/codeql-action/init@v2
+    #     with:
+    #       languages: ${{ matrix.language }}
+    #       queries: +security-and-quality
 
-      - name: Autobuild
-        uses: github/codeql-action/autobuild@v2
+    #   - name: Autobuild
+    #     uses: github/codeql-action/autobuild@v2
 
-      - name: Perform CodeQL Analysis for Standard Queries
-        uses: github/codeql-action/analyze@v2
-        with:
-          language: ${{ matrix.language }}
+    #   - name: Perform CodeQL Analysis for Standard Queries
+    #     uses: github/codeql-action/analyze@v2
+    #     with:
+    #       language: ${{ matrix.language }}
 
   analyze_cwe502:
     name: Analyze CWE-502 Queries
@@ -79,8 +79,8 @@ jobs:
           languages: ${{ matrix.language }}
           queries: ./codeql-repo/java/ql/test/experimental/query-tests/security/CWE-502/
 
-      - name: Autobuild
-        uses: github/codeql-action/autobuild@v2
+      # - name: Autobuild
+      #   uses: github/codeql-action/autobuild@v2
 
       - name: Perform CodeQL Analysis for CWE-502 Queries
         uses: github/codeql-action/analyze@v2
