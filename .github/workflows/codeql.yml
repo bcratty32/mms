@@ -13,8 +13,8 @@ jobs:
     name: Analyze
     runs-on: ubuntu-latest
     permissions:
-      actions: read
-      contents: read
+      actions: write
+      contents: write
       security-events: write
 
     steps:
@@ -30,7 +30,7 @@ jobs:
           java-version: 11
 
       - name: Compile Java
-        run: ./gradlew --no-daemon bootJar
+        run: ./gradlew --no-daemon bootRun
 
       # Initialize for built-in queries
       - name: Initialize CodeQL for built-in queries
