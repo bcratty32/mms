@@ -59,3 +59,42 @@ jobs:
         uses: github/codeql-action/analyze@v2
         with:
           category: "/language:${{ matrix.language }}"
+    
+  analyze-cwe:
+      name: Analyze CWE-502 Queries
+      runs-on: ubuntu-latest
+      permissions:
+        actions: read
+        contents: read
+        security-events: write
+      strategy:
+        fail-fast: false
+        matrix:
+          language: [ java ]
+          
+      steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: temurin
+          java-version: 11
+
+      # Initialize for CWE-502 queries
+      - name: Initialize CodeQL for CWE-502 queries
+        uses: github/codeql-action/init@v2
+        with:
+          languages: ${{ matrix.language }}
+          queries: java/test/experimental/query-tests/security/CWE-502/
+
+      - name: Autobuild
+        uses: github/codeql-action/autobuild@v2
+        
+      # Analysis for CWE-502 queries
+      - name: Perform CodeQL Analysis for CWE-502 queries
+        uses: github/codeql-action/analyze@v2
+        with:
+          language: ${{ matrix.language }}
+          output: .github/codeql/cwe502-results # Optional: Store results in a separate directory
