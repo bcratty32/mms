@@ -17,14 +17,11 @@ jobs:
       contents: read
       security-events: write
 
-    strategy:
-      fail-fast: false
-      matrix:
-        language: [ java ]
-
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+        with:
+          submodules: 'recursive'
 
       - name: Setup Java
         uses: actions/setup-java@v3
@@ -32,30 +29,24 @@ jobs:
           distribution: temurin
           java-version: 11
 
-      - name: Initialize CodeQL
+      # - name: Compile Java
+      #   run: ./gradlew --no-daemon bootJar
+
+      # Initialize for built-in queries
+      - name: Initialize CodeQL for built-in queries
         uses: github/codeql-action/init@v2
         with:
           languages: ${{ matrix.language }}
           config-file: ./.github/codeql.yml
           queries: +security-and-quality
-          
-      # Step for CWE-502 custom queries
-      - name: Initialize CodeQL for CWE-502 queries
-        uses: github/codeql-action/init@v2
-        with:
-          languages: ${{ matrix.language }}
-          queries: java/test/experimental/query-tests/security/CWE-502/
-
-      - name: Perform CodeQL Analysis for CWE-502 queries
-        uses: github/codeql-action/analyze@v2
-        with:
-          language: ${{ matrix.language }}
-          output: .github/codeql/cwe502-results # Store results in a separate directory          
+          # queries: ./codeql-repo/java/ql/test/experimental/query-tests/security/CWE-502/
+          # queries: +security-and-quality,./.github/workflows/custom-queries/
 
       - name: Autobuild
         uses: github/codeql-action/autobuild@v2
 
-      - name: Perform CodeQL Analysis
+      # Analysis for built-in queries
+      - name: Perform CodeQL Analysis for built-in queries
         uses: github/codeql-action/analyze@v2
         with:
-          category: "/language:${{ matrix.language }}"
+          language: ${{ matrix.language }}
