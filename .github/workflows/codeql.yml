@@ -9,25 +9,17 @@ on:
     - cron: "4 23 * * 1"
 
 jobs:
-
-  analyze_cwe502:
-    name: Analyze CWE-502 Queries
+  analyze:
+    name: Analyze
     runs-on: ubuntu-latest
     permissions:
       actions: read
       contents: read
       security-events: write
 
-    strategy:
-      fail-fast: false
-      matrix:
-        language: [ "java" ]
-
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-        with:
-          submodules: 'recursive'
 
       - name: Setup Java
         uses: actions/setup-java@v3
@@ -35,17 +27,18 @@ jobs:
           distribution: temurin
           java-version: 11
 
-      - name: Initialize CodeQL for CWE-502 Queries
+      # Initialize for built-in queries
+      - name: Initialize CodeQL for built-in queries
         uses: github/codeql-action/init@v2
         with:
           languages: ${{ matrix.language }}
-          queries: ./codeql-repo/java/ql/test/experimental/query-tests/security/CWE-502/
+          queries: +security-and-quality,./custom-queries/
 
-      # - name: Autobuild
-      #   uses: github/codeql-action/autobuild@v2
+      - name: Autobuild
+        uses: github/codeql-action/autobuild@v2
 
-      - name: Perform CodeQL Analysis for CWE-502 Queries
+      # Analysis for built-in queries
+      - name: Perform CodeQL Analysis for built-in queries
         uses: github/codeql-action/analyze@v2
         with:
           language: ${{ matrix.language }}
-          output: .github/codeql/cwe502-results  # Store results in a separate directory
